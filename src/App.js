@@ -13,10 +13,6 @@ class Cell extends React.Component {
 }
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderBlock(blockX, blockY) {
     var cells = Array(9);
     var data = this.props.cellData;
@@ -74,7 +70,7 @@ class App extends React.Component {
       0, 0, 6, 4, 0, 2, 5, 0, 0];
     this.state = {
       data: data.map(v => {
-        return {value : v};
+        return {value : v, locked: (v !== 0)};
       }),
       selectedRow: 1,
       selectedColumn: 1
@@ -116,6 +112,19 @@ class App extends React.Component {
       }
     }
     this.setState({selectedColumn: x, selectedRow: y});
+
+    const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    if (digits.includes(event.key)) {
+      this.setState((prevState) => {
+        var data = prevState.data.slice();
+        var currentCell = data[y * 9 + x];
+        if (!currentCell.locked) {
+          currentCell.value = parseInt(event.key);
+        }
+        return { data: data };
+      })
+
+    }
     console.log("After update selected: " + x + ", " + y);
   };
 
