@@ -15,25 +15,12 @@ class Cell extends React.Component {
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    let data = [
-      0, 0, 1, 2, 0, 3, 4, 0, 0,
-      0, 0, 0, 6, 0, 7, 0, 0, 0,
-      5, 0, 0, 0, 0, 0, 0, 0, 3,
-      3, 7, 0, 0, 0, 0, 0, 8, 1,
-      0, 0, 0, 0, 0, 0, 0, 0, 0,
-      6, 2, 0, 0, 0, 0, 0, 3, 7,
-      1, 0, 0, 0, 0, 0, 0, 0, 8,
-      0, 0, 0, 8, 0, 5, 0, 0, 0,
-      0, 0, 6, 4, 0, 2, 5, 0, 0];
-    this.state = {
-      data: data.map(v => {
-        return {value : v};
-      })
-    }
   }
 
   renderBlock(blockX, blockY) {
     var cells = Array(9);
+    var data = this.props.cellData;
+
     for(var j = 0; j < 3; j++) {
       let y = blockY * 3 + j;
       for(var i = 0; i < 3; i++) {
@@ -48,7 +35,7 @@ class Board extends React.Component {
         } else {
           selection = "";
         }
-        cells.push(<Cell key={x + "," + y + "," + selection} value={this.state.data[y*9+x]} selection={selection} />);
+        cells.push(<Cell key={x + "," + y + "," + selection} value={data[y*9+x]} selection={selection} />);
       }
     }
     return <div className="block">
@@ -75,7 +62,20 @@ class Board extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
+    let data = [
+      0, 0, 1, 2, 0, 3, 4, 0, 0,
+      0, 0, 0, 6, 0, 7, 0, 0, 0,
+      5, 0, 0, 0, 0, 0, 0, 0, 3,
+      3, 7, 0, 0, 0, 0, 0, 8, 1,
+      0, 0, 0, 0, 0, 0, 0, 0, 0,
+      6, 2, 0, 0, 0, 0, 0, 3, 7,
+      1, 0, 0, 0, 0, 0, 0, 0, 8,
+      0, 0, 0, 8, 0, 5, 0, 0, 0,
+      0, 0, 6, 4, 0, 2, 5, 0, 0];
     this.state = {
+      data: data.map(v => {
+        return {value : v};
+      }),
       selectedRow: 1,
       selectedColumn: 1
     };
@@ -133,7 +133,10 @@ class App extends React.Component {
     return (
       <div className="content" onKeyDown={this.handleKeyDown}>
         <h1>SUDOKU</h1>
-        <Board selectedRow={this.state.selectedRow} selectedColumn={this.state.selectedColumn} />
+        <Board
+          cellData={this.state.data}
+          selectedRow={this.state.selectedRow}
+          selectedColumn={this.state.selectedColumn} />
         <footer>&copy; Copyright 2021, Antoine Busch</footer>
       </div>
     );
