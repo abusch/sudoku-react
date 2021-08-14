@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+input.cell {
+  border: solid 1px black;
+  text-align: center;
+  margin-right: -1px;
+  margin-top: -1px;
+  width: 34px;
+  height: 34px;
+}

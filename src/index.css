@@ -1,13 +1,68 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import "./nord.css";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+
+html {
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: var(--nord0);
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  font-size: xxx-large;
+  color: var(--nord7);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board {
+  background-color: var(--nord0);
+  color: var(--nord6);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 1px;
+  margin: 0 auto;
+}
+
+.block {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.cell {
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-weight: bold;
+  font-size: 1.5em;
+  border: var(--nord2) 1px solid;
+  margin-top: -1px;
+  margin-left: -1px;
+}
+
+.cell.selectedCell {
+  background-color: var(--nord3);
+}
+
+.cell.selectedRow, .cell.selectedColumn {
+  background-color: var(--nord1);
+}
+
+footer {
+  margin-top: 5em;
+  color: var(--nord7);
 }
