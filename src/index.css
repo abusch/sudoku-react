@@ -62,6 +62,11 @@ h1 {
   background-color: var(--nord1);
 }
 
+.cell.locked {
+  color: var(--nord8);
+	background-image: radial-gradient(circle, var(--nord1) 55%, var(--nord0) 60%);
+}
+
 footer {
   margin-top: 5em;
   color: var(--nord7);
