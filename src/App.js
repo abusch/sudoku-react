@@ -2,8 +2,8 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 
 export const Cell = (props) => {
-  let value = (props.value.value === 0) ? " " : (props.value.value);
-  let locked = (props.value.locked) ? "locked " : " ";
+  const value = (props.value.value === 0) ? " " : (props.value.value);
+  const locked = (props.value.locked) ? "locked " : " ";
   return <div className={"cell " + locked + props.selection}>
     {value}
   </div>;
@@ -11,14 +11,14 @@ export const Cell = (props) => {
 
 export const Board = (props) => {
   const renderBlock = (blockX, blockY) => {
-    var cells = Array(9);
-    var data = props.cellData;
+    const cells = Array(9);
+    const data = props.cellData;
 
-    for (var j = 0; j < 3; j++) {
-      let y = blockY * 3 + j;
-      for (var i = 0; i < 3; i++) {
-        let x = blockX * 3 + i;
-        var selection;
+    for (let j = 0; j < 3; j++) {
+      const y = blockY * 3 + j;
+      for (let i = 0; i < 3; i++) {
+        const x = blockX * 3 + i;
+        let selection;
         if (x === props.selectedColumn && y === props.selectedRow) {
           selection = "selectedCell";
         } else if (x === props.selectedColumn) {
@@ -70,8 +70,8 @@ const App = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      var x = selection.column;
-      var y = selection.row;
+      let x = selection.column;
+      let y = selection.row;
       console.log("In handleKeyDown: event = " + event.key);
       console.log("state = " + boardData);
       console.log("current selected: " + x + ", " + y);
@@ -106,8 +106,8 @@ const App = () => {
       const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
       if (digits.includes(event.key)) {
         setBoardData((prevState) => {
-          var data = prevState.slice();
-          var currentCell = data[y * 9 + x];
+          const data = prevState.slice();
+          const currentCell = data[y * 9 + x];
           if (!currentCell.locked) {
             currentCell.value = parseInt(event.key);
           }
