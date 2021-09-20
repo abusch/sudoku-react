@@ -13,6 +13,8 @@ export const Board = (props) => {
   const renderBlock = (blockX, blockY) => {
     const cells = Array(9);
     const data = props.cellData;
+    const selectedBlockX = Math.floor(props.selectedColumn / 3);
+    const selectedBlockY = Math.floor(props.selectedRow / 3);
 
     for (let j = 0; j < 3; j++) {
       const y = blockY * 3 + j;
@@ -25,6 +27,8 @@ export const Board = (props) => {
           selection = "selectedColumn";
         } else if (y === props.selectedRow) {
           selection = "selectedRow";
+        } else if (blockX === selectedBlockX && blockY === selectedBlockY) {
+          selection = "selectedBlock";
         } else {
           selection = "";
         }

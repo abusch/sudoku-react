@@ -58,7 +58,7 @@ h1 {
   background-color: var(--nord3);
 }
 
-.cell.selectedRow, .cell.selectedColumn {
+.cell.selectedRow, .cell.selectedColumn, .cell.selectedBlock {
   background-color: var(--nord1);
 }
 
