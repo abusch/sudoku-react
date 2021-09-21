@@ -1,5 +1,7 @@
-import './App.css';
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { moveRight, moveLeft, moveUp, moveDown } from './selectionSlice';
+import './App.css';
 
 export const Cell = (props) => {
   const classes = ["cell", props.selection];
@@ -91,10 +93,8 @@ const App = () => {
     return { value: v, locked: (v !== 0), pencilMarks: Array(9) };
   });
   const [boardData, setBoardData] = useState(initialData);
-  const [selection, setSelection] = useState({
-    row: 1,
-    column: 1
-  });
+  const selection = useSelector(state => state.selection);
+  const dispatch = useDispatch();
 
   const digitKeyToDigit = (code) => {
     switch (code) {
@@ -120,17 +120,13 @@ const App = () => {
       // console.log("current selected: " + x + ", " + y);
 
       if (event.key === 'j' || event.key === 'ArrowDown') {
-        y = (y === 8) ? 0 : y + 1;
-        setSelection({ column: x, row: y });
+        dispatch(moveDown());
       } else if (event.key === 'k' || event.key === 'ArrowUp') {
-        y = (y === 0) ? 8 : y - 1;
-        setSelection({ column: x, row: y });
+        dispatch(moveUp());
       } else if (event.key === 'h' || event.key === 'ArrowLeft') {
-        x = (x === 0) ? 8 : x - 1;
-        setSelection({ column: x, row: y });
+        dispatch(moveLeft());
       } else if (event.key === 'l' || event.key === 'ArrowRight') {
-        x = (x === 8) ? 0 : x + 1;
-        setSelection({ column: x, row: y });
+        dispatch(moveRight());
       } else if (digitKeyToDigit(event.code)) {
         setBoardData((prevState) => {
           const data = prevState.slice();
@@ -175,7 +171,7 @@ const App = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [boardData, selection]);
+  }, [boardData, dispatch, selection]);
 
 
   return (
