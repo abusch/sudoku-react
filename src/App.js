@@ -2,10 +2,22 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 
 export const Cell = (props) => {
+  const classes = ["cell", props.selection];
   const value = (props.value.value === 0) ? " " : (props.value.value);
-  const locked = (props.value.locked) ? "locked " : " ";
-  return <div className={"cell " + locked + props.selection}>
-    {value}
+  const pencilMarks = props.value.pencilMarks.filter(v => v !== undefined).join(' ');
+  const displayValue = (pencilMarks !== "") ? pencilMarks : value;
+
+  if (props.value.locked) {
+    classes.push("locked");
+  }
+  if (pencilMarks !== "") {
+    classes.push("pencilMark");
+  }
+
+  // console.log(`value: ${value}, pencilMarks: ${pencilMarks}, displayValue: ${displayValue}`);
+
+  return <div className={classes.join(' ')}>
+    {displayValue}
   </div>;
 }
 
@@ -65,7 +77,7 @@ export const Board = (props) => {
 }
 
 const App = () => {
-  const data = [
+  const sudoku = [
     0, 0, 1, 2, 0, 3, 4, 0, 0,
     0, 0, 0, 6, 0, 7, 0, 0, 0,
     5, 0, 0, 0, 0, 0, 0, 0, 3,
@@ -75,22 +87,37 @@ const App = () => {
     1, 0, 0, 0, 0, 0, 0, 0, 8,
     0, 0, 0, 8, 0, 5, 0, 0, 0,
     0, 0, 6, 4, 0, 2, 5, 0, 0];
-  const [boardData, setBoardData] = useState(data.map(v => {
-    return { value: v, locked: (v !== 0) };
-  }));
+  const initialData = sudoku.map(v => {
+    return { value: v, locked: (v !== 0), pencilMarks: Array(9) };
+  });
+  const [boardData, setBoardData] = useState(initialData);
   const [selection, setSelection] = useState({
     row: 1,
     column: 1
   });
 
+  const digitKeyToDigit = (code) => {
+    switch (code) {
+      case "Digit1": return 1;
+      case "Digit2": return 2;
+      case "Digit3": return 3;
+      case "Digit4": return 4;
+      case "Digit5": return 5;
+      case "Digit6": return 6;
+      case "Digit7": return 7;
+      case "Digit8": return 8;
+      case "Digit9": return 9;
+      default: return undefined;
+    }
+  }
+
   useEffect(() => {
     const handleKeyDown = (event) => {
-      const digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
       let x = selection.column;
       let y = selection.row;
-      console.log("In handleKeyDown: event = " + event.key);
-      console.log("state = " + boardData);
-      console.log("current selected: " + x + ", " + y);
+      // console.log("In handleKeyDown: event = " + event.key);
+      // console.log("state = " + boardData);
+      // console.log("current selected: " + x + ", " + y);
 
       if (event.key === 'j' || event.key === 'ArrowDown') {
         y = (y === 8) ? 0 : y + 1;
@@ -104,12 +131,30 @@ const App = () => {
       } else if (event.key === 'l' || event.key === 'ArrowRight') {
         x = (x === 8) ? 0 : x + 1;
         setSelection({ column: x, row: y });
-      } else if (digits.includes(event.key)) {
+      } else if (digitKeyToDigit(event.code)) {
         setBoardData((prevState) => {
           const data = prevState.slice();
-          const currentCell = data[y * 9 + x];
+          const cellOffset = y * 9 + x;
+          const currentCell = data[cellOffset];
+          const digit = digitKeyToDigit(event.code);
+          // Don't touch locked cells
           if (!currentCell.locked) {
-            currentCell.value = parseInt(event.key);
+            // console.log(`cell before: ${JSON.stringify(data)}`);
+            if (event.shiftKey) {
+              const pencilMarks = currentCell.pencilMarks.slice();
+              // console.log(`Got a pencil mark: ${digit}`);
+              // pencil mark
+              if (pencilMarks[digit]) {
+                pencilMarks[digit] = undefined;
+              } else {
+                pencilMarks[digit] = digit;
+              }
+              data[cellOffset] = { ...currentCell, pencilMarks: pencilMarks };
+            } else {
+              // Regular digit
+              data[cellOffset] = { ...currentCell, value: digit };
+            }
+            // console.log(`cell after: ${JSON.stringify(data)}`);
           }
           return data;
         })
@@ -118,7 +163,7 @@ const App = () => {
           const data = prevState.slice();
           const currentCell = data[y * 9 + x];
           if (!currentCell.locked) {
-            currentCell.value = 0;
+            data[y * 9 + x] = { ...currentCell, value: 0 };
           }
           return data;
         })
@@ -144,5 +189,11 @@ const App = () => {
     </div>
   );
 }
+
+/* function* range(start, stop) {
+  for(let i = start; i < stop; i++) {
+    yield i;
+  }
+} */
 
 export default App;

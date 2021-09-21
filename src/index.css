@@ -67,6 +67,12 @@ h1 {
 	/* background-image: radial-gradient(circle, var(--nord1) 55%, var(--nord0) 60%); */
 }
 
+.cell.pencilMark {
+  font-size: xx-small;
+  width: auto;
+  height: auto;
+}
+
 footer {
   margin-top: 5em;
   color: var(--nord7);
