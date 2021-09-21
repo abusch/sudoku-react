@@ -2,85 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { moveRight, moveLeft, moveUp, moveDown } from './selectionSlice';
 import { setDigit, setPencilMark } from './sudokuSlice';
+import { Board } from './components/board';
 import './App.css';
-
-export const Cell = (props) => {
-  const classes = ["cell", props.selection];
-  const pencilMarks = Array.from(props.value.pencilMarks).sort().join(' ');
-
-  if (props.value.locked) {
-    classes.push("locked");
-  }
-
-  let displayValue;
-  if (props.value.value === 0) {
-    displayValue = pencilMarks;
-    classes.push("pencilMark");
-  } else {
-    displayValue = props.value.value;
-  }
-
-  return <div className={classes.join(' ')}>
-    {displayValue}
-  </div>;
-}
-
-const Block = (props) => {
-  const selection = useSelector(state => state.selection);
-  const data = useSelector(state => state.sudoku);
-
-  const blockX = props.x;
-  const blockY = props.y;
-
-  const cells = [];
-  const { row, column } = selection;
-  const selectedBlockX = Math.floor(column / 3);
-  const selectedBlockY = Math.floor(row / 3);
-
-  for (let j = 0; j < 3; j++) {
-    const y = blockY * 3 + j;
-    for (let i = 0; i < 3; i++) {
-      const x = blockX * 3 + i;
-      let selection;
-      if (x === column && y === row) {
-        selection = "selectedCell";
-      } else if (x === column) {
-        selection = "selectedColumn";
-      } else if (y === row) {
-        selection = "selectedRow";
-      } else if (blockX === selectedBlockX && blockY === selectedBlockY) {
-        selection = "selectedBlock";
-      } else {
-        selection = "";
-      }
-      // Generate an appropriate key to make sure a cell is only rerendered when needed:
-      const key = x + "," + y + "," + selection;
-      cells.push(<Cell key={key} value={data[y * 9 + x]} selection={selection} />);
-    }
-  }
-
-  return <div className="block">
-    {cells}
-  </div>
-}
-
-export const Board = (props) => {
-  const renderBlock = (blockX, blockY) => {
-    return <Block x={blockX} y={blockY} cellData={props.cellData} selection={props.selection} />;
-  };
-
-  return <div className="board">
-    {renderBlock(0, 0)}
-    {renderBlock(1, 0)}
-    {renderBlock(2, 0)}
-    {renderBlock(0, 1)}
-    {renderBlock(1, 1)}
-    {renderBlock(2, 1)}
-    {renderBlock(0, 2)}
-    {renderBlock(1, 2)}
-    {renderBlock(2, 2)}
-  </div>;
-}
 
 const App = () => {
   const selection = useSelector(state => state.selection);
@@ -146,7 +69,10 @@ const App = () => {
     <div className="content">
       <h1>SUDOKU</h1>
       <Board />
-      <footer>&copy; Copyright 2021, Antoine Busch</footer>
+      <footer>
+        <div>&copy; Copyright 2021, Antoine Busch</div>
+        <div>Colours by <a href="https://www.nordtheme.com/">Nord Theme</a></div>
+      </footer>
     </div>
   );
 }

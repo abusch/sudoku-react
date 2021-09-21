@@ -19,6 +19,10 @@ h1 {
   color: var(--nord7);
 }
 
+a {
+  color: var(--nord9);
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -76,4 +80,7 @@ h1 {
 footer {
   margin-top: 5em;
   color: var(--nord7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
