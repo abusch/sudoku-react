@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { moveRight, moveLeft, moveUp, moveDown } from './selectionSlice';
+import { setDigit, setPencilMark } from './sudokuSlice';
 import './App.css';
 
 export const Cell = (props) => {
   const classes = ["cell", props.selection];
-  const value = (props.value.value === 0) ? " " : (props.value.value);
-  const pencilMarks = props.value.pencilMarks.filter(v => v !== undefined).join(' ');
-  const displayValue = (pencilMarks !== "") ? pencilMarks : value;
+  const pencilMarks = Array.from(props.value.pencilMarks).sort().join(' ');
 
   if (props.value.locked) {
     classes.push("locked");
   }
-  if (pencilMarks !== "") {
-    classes.push("pencilMark");
-  }
 
-  // console.log(`value: ${value}, pencilMarks: ${pencilMarks}, displayValue: ${displayValue}`);
+  let displayValue;
+  if (props.value.value === 0) {
+    displayValue = pencilMarks;
+    classes.push("pencilMark");
+  } else {
+    displayValue = props.value.value;
+  }
 
   return <div className={classes.join(' ')}>
     {displayValue}
@@ -24,12 +26,14 @@ export const Cell = (props) => {
 }
 
 const Block = (props) => {
+  const selection = useSelector(state => state.selection);
+  const data = useSelector(state => state.sudoku);
+
   const blockX = props.x;
   const blockY = props.y;
 
   const cells = [];
-  const data = props.cellData;
-  const { row, column } = props.selection;
+  const { row, column } = selection;
   const selectedBlockX = Math.floor(column / 3);
   const selectedBlockY = Math.floor(row / 3);
 
@@ -79,20 +83,6 @@ export const Board = (props) => {
 }
 
 const App = () => {
-  const sudoku = [
-    0, 0, 1, 2, 0, 3, 4, 0, 0,
-    0, 0, 0, 6, 0, 7, 0, 0, 0,
-    5, 0, 0, 0, 0, 0, 0, 0, 3,
-    3, 7, 0, 0, 0, 0, 0, 8, 1,
-    0, 0, 0, 0, 0, 0, 0, 0, 0,
-    6, 2, 0, 0, 0, 0, 0, 3, 7,
-    1, 0, 0, 0, 0, 0, 0, 0, 8,
-    0, 0, 0, 8, 0, 5, 0, 0, 0,
-    0, 0, 6, 4, 0, 2, 5, 0, 0];
-  const initialData = sudoku.map(v => {
-    return { value: v, locked: (v !== 0), pencilMarks: Array(9) };
-  });
-  const [boardData, setBoardData] = useState(initialData);
   const selection = useSelector(state => state.selection);
   const dispatch = useDispatch();
 
@@ -115,9 +105,6 @@ const App = () => {
     const handleKeyDown = (event) => {
       let x = selection.column;
       let y = selection.row;
-      // console.log("In handleKeyDown: event = " + event.key);
-      // console.log("state = " + boardData);
-      // console.log("current selected: " + x + ", " + y);
 
       if (event.key === 'j' || event.key === 'ArrowDown') {
         dispatch(moveDown());
@@ -128,68 +115,40 @@ const App = () => {
       } else if (event.key === 'l' || event.key === 'ArrowRight') {
         dispatch(moveRight());
       } else if (digitKeyToDigit(event.code)) {
-        setBoardData((prevState) => {
-          const data = prevState.slice();
-          const cellOffset = y * 9 + x;
-          const currentCell = data[cellOffset];
-          const digit = digitKeyToDigit(event.code);
-          // Don't touch locked cells
-          if (!currentCell.locked) {
-            // console.log(`cell before: ${JSON.stringify(data)}`);
-            if (event.shiftKey) {
-              const pencilMarks = currentCell.pencilMarks.slice();
-              // console.log(`Got a pencil mark: ${digit}`);
-              // pencil mark
-              if (pencilMarks[digit]) {
-                pencilMarks[digit] = undefined;
-              } else {
-                pencilMarks[digit] = digit;
-              }
-              data[cellOffset] = { ...currentCell, pencilMarks: pencilMarks };
-            } else {
-              // Regular digit
-              data[cellOffset] = { ...currentCell, value: digit };
-            }
-            // console.log(`cell after: ${JSON.stringify(data)}`);
-          }
-          return data;
-        })
+        const payload = {
+          column: x,
+          row: y,
+          digit: digitKeyToDigit(event.code),
+        };
+        if (event.shiftKey) {
+          dispatch(setPencilMark(payload));
+        } else {
+          dispatch(setDigit(payload));
+        }
       } else if (event.key === 'Backspace') {
-        setBoardData((prevState) => {
-          const data = prevState.slice();
-          const currentCell = data[y * 9 + x];
-          if (!currentCell.locked) {
-            data[y * 9 + x] = { ...currentCell, value: 0 };
-          }
-          return data;
-        })
+        const payload = {
+          column: x,
+          row: y,
+          digit: 0,
+        };
+        dispatch(setDigit(payload));
       }
-      // console.log("After update selected: " + x + ", " + y);
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [boardData, dispatch, selection]);
+  }, [dispatch, selection]);
 
 
   return (
     <div className="content">
       <h1>SUDOKU</h1>
-      <Board
-        cellData={boardData}
-        selection={selection}
-      />
+      <Board />
       <footer>&copy; Copyright 2021, Antoine Busch</footer>
     </div>
   );
 }
-
-/* function* range(start, stop) {
-  for(let i = start; i < stop; i++) {
-    yield i;
-  }
-} */
 
 export default App;
