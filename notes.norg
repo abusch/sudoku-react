@@ -1,0 +1,18 @@
+@document.meta
+  title: notes
+  description: 
+  author: abusch
+  categories: 
+  created: 2021-09-23
+  version: 0.1
+@end
+
+* Stuff left to do:
+  - [ ] Check if the sudoku is solved on every move
+  - [ ] replace `Set` with something else for pencil marks as it apparently doesn't play well with redux
+  - [ ] Add *check* or *verify* button instead of checking on every move
+  - [ ] add *reset* button to start over
+  - [ ] finish up sudoku generator
+  - [ ] implement Undo functionality (maybe using redux?)
+  - [ ] refactor/split-up CSS to be less of a mess (move to SCSS or SASS or css-modules or whatever?)
+  - [ ] move to TypeScript
