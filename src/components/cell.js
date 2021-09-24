@@ -5,6 +5,9 @@ export const Cell = (props) => {
   if (props.value.locked) {
     classes.push("locked");
   }
+  if (!props.value.valid) {
+    classes.push("invalid");
+  }
 
   let displayValue;
   if (props.value.value === 0) {

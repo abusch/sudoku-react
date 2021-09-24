@@ -71,6 +71,10 @@ a {
 	/* background-image: radial-gradient(circle, var(--nord1) 55%, var(--nord0) 60%); */
 }
 
+.cell.invalid {
+  color: var(--nord11);
+}
+
 .cell.pencilMark {
   font-size: xx-small;
   width: auto;

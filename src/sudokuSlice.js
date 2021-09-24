@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { checkCellObjectValid } from './sudoku';
 
 const initialData = [
   0, 0, 1, 2, 0, 3, 4, 0, 0,
@@ -14,6 +15,7 @@ const initialData = [
 const digitToCell = (digit) => ({
   value: digit,
   locked: (digit !== 0),
+  valid: true,
   pencilMarks: new Set(),
 });
 
@@ -25,7 +27,9 @@ export const sudokuSlice = createSlice({
       const { row, column, digit } = action.payload;
       const cell = state[row * 9 + column];
       if (!cell.locked) {
+        cell.valid = checkCellObjectValid(state, row, column, digit);
         cell.value = digit;
+        cell.pencilMarks.clear();
       }
     },
     setPencilMark: (state, action) => {
@@ -36,6 +40,7 @@ export const sudokuSlice = createSlice({
           cell.pencilMarks.delete( digit );
         } else {
           cell.pencilMarks.add( digit );
+          cell.value = 0;
         } 
       }
     }
