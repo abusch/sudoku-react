@@ -27,7 +27,6 @@ export const sudokuSlice = createSlice({
       const { row, column, digit } = action.payload;
       const cell = state[row * 9 + column];
       if (!cell.locked) {
-        cell.valid = checkCellObjectValid(state, row, column, digit);
         cell.value = digit;
         cell.pencilMarks.clear();
       }
@@ -43,9 +42,27 @@ export const sudokuSlice = createSlice({
           cell.value = 0;
         } 
       }
+    },
+    verify: (state) => {
+      state.forEach((cell, index) => {
+        const row = Math.floor(index / 9);
+        const col = index % 9;
+        if (!cell.locked) {
+          cell.valid = checkCellObjectValid(state, row, col, cell.value);
+        }
+      });
+    },
+    restart: (state) => {
+      state.forEach((cell) => {
+        if (!cell.locked) {
+          cell.value = 0;
+          cell.pencilMarks.clear();
+          cell.valid = true;
+        }
+      });
     }
   }
 });
 
-export const {setDigit, setPencilMark} = sudokuSlice.actions;
+export const {setDigit, setPencilMark, verify, restart} = sudokuSlice.actions;
 export default sudokuSlice.reducer;

@@ -50,22 +50,27 @@ function checkCellObjectValid(cells, row, col, digit) {
   }
 
   // top-left coordinates of the 3x3 block that contains the cell
+  const cellIdx = row * 9 + col;
   const block_row = Math.floor(row / 3) * 3;
   const block_col = Math.floor(col / 3) * 3;
 
-  console.log(`Checking cell (${row}, ${col})`);
   for (let i = 0; i < 9; i++) {
     const row_offset = Math.floor(i / 3);
     const column_offset = i % 3;
-    const sameCol = cells[row * 9 + i].value;
-    const sameRow = cells[i * 9 + col].value;
-    const sameBlock = cells[(block_row + row_offset) * 9 + (block_col + column_offset)].value;
-      console.log(`same col=${sameCol}, row=${sameRow}, block=${sameBlock}`);
-    if ( sameCol === digit // check column
-      || sameRow === digit  // check row
-      || sameBlock === digit // check block
-    ) {
-      console.log(`found invalid digit: i = ${i}`);
+    const sameColIdx = row * 9 + i;
+    const sameRowIdx = i * 9 + col;
+    const sameBlockIdx = (block_row + row_offset) * 9 + (block_col + column_offset);
+
+    const sameCol = cells[sameColIdx].value;
+    const sameRow = cells[sameRowIdx].value;
+    const sameBlock = cells[sameBlockIdx].value;
+
+    // Make sure we don't validate the current cell with itself
+    const invalidInCol = (sameColIdx === cellIdx) ? false : (sameCol === digit);
+    const invalidInRow = (sameRowIdx === cellIdx) ? false : (sameRow === digit);
+    const invalidInBlock = (sameBlockIdx === cellIdx) ? false : (sameBlock === digit);
+
+    if (invalidInCol || invalidInRow || invalidInBlock) {
       return false;
     }
   }

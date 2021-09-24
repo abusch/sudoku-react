@@ -27,6 +27,9 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .board {
@@ -43,6 +46,20 @@ a {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.controls button {
+  border: none;
+  margin: 1em;
+  padding: 0.5em;
+  background-color: var(--nord9);
 }
 
 .cell {

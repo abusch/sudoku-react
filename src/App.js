@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { moveRight, moveLeft, moveUp, moveDown } from './selectionSlice';
 import { setDigit, setPencilMark } from './sudokuSlice';
 import { Board } from './components/board';
+import { Controls } from './components/controls';
 import './App.css';
 
 const App = () => {
@@ -69,6 +70,7 @@ const App = () => {
     <div className="content">
       <h1>SUDOKU</h1>
       <Board />
+      <Controls />
       <footer>
         <div>&copy; Copyright 2021, Antoine Busch</div>
         <div>Colours by <a href="https://www.nordtheme.com/">Nord Theme</a></div>
