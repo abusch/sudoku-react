@@ -78,6 +78,38 @@ function checkCellObjectValid(cells, row, col, digit) {
   return true;
 }
 
+// Remove the pencil marks matching the given digit in the same row/column/block as the
+// given selection.
+function removePencilMarks(cells, row, col, digit) {
+
+  // top-left coordinates of the 3x3 block that contains the cell
+  const cellIdx = row * 9 + col;
+  const block_row = Math.floor(row / 3) * 3;
+  const block_col = Math.floor(col / 3) * 3;
+
+  for (let i = 0; i < 9; i++) {
+    const row_offset = Math.floor(i / 3);
+    const column_offset = i % 3;
+    const sameColIdx = row * 9 + i;
+    const sameRowIdx = i * 9 + col;
+    const sameBlockIdx = (block_row + row_offset) * 9 + (block_col + column_offset);
+
+    const sameCol = cells[sameColIdx];
+    const sameRow = cells[sameRowIdx];
+    const sameBlock = cells[sameBlockIdx];
+
+    if (sameColIdx !== cellIdx) {
+      sameCol.pencilMarks.delete(digit);
+    }
+    if (sameRowIdx !== cellIdx) {
+      sameRow.pencilMarks.delete(digit);
+    }
+    if (sameBlockIdx !== cellIdx) {
+      sameBlock.pencilMarks.delete(digit);
+    }
+  }
+}
+
 function findEmptyCell(cells) {
   for (let i = 0; i < 81; i++) {
     if (cells[i] === 0) {
@@ -88,4 +120,4 @@ function findEmptyCell(cells) {
   return -1;
 }
 
-export {solveSudoku, checkCellObjectValid};
+export {solveSudoku, checkCellObjectValid, removePencilMarks};

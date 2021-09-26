@@ -8,11 +8,13 @@
 @end
 
 * Stuff left to do:
+  - [x] Adjust pencil marks when entering a digit
   - [ ] Check if the sudoku is solved on every move
   - [ ] replace `Set` with something else for pencil marks as it apparently doesn't play well with redux
-  - [ ] Add *check* or *verify* button instead of checking on every move
-  - [ ] add *reset* button to start over
+  - [x] Add *check* or *verify* button instead of checking on every move
+  - [x] add *reset* button to start over
   - [ ] finish up sudoku generator
   - [ ] implement Undo functionality (maybe using redux?)
   - [ ] refactor/split-up CSS to be less of a mess (move to SCSS or SASS or css-modules or whatever?)
+  - [ ] add timer
   - [ ] move to TypeScript
