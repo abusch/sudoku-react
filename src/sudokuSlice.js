@@ -16,7 +16,7 @@ const digitToCell = (digit) => ({
   value: digit,
   locked: (digit !== 0),
   valid: true,
-  pencilMarks: new Set(),
+  pencilMarks: [],
 });
 
 export const sudokuSlice = createSlice({
@@ -28,7 +28,7 @@ export const sudokuSlice = createSlice({
       const cell = state[row * 9 + column];
       if (!cell.locked) {
         cell.value = digit;
-        cell.pencilMarks.clear();
+        cell.pencilMarks = [];
         removePencilMarks(state, row, column, digit);
       }
     },
@@ -36,10 +36,11 @@ export const sudokuSlice = createSlice({
       const { row, column, digit } = action.payload;
       const cell = state[row * 9 + column];
       if (!cell.locked) {
-        if (cell.pencilMarks.has( digit )) {
-          cell.pencilMarks.delete( digit );
+        const i = cell.pencilMarks.indexOf(digit);
+        if (i !== -1) {
+          cell.pencilMarks.splice(i, 1);
         } else {
-          cell.pencilMarks.add( digit );
+          cell.pencilMarks.push( digit );
           cell.value = 0;
         } 
       }
@@ -57,7 +58,7 @@ export const sudokuSlice = createSlice({
       state.forEach((cell) => {
         if (!cell.locked) {
           cell.value = 0;
-          cell.pencilMarks.clear();
+          cell.pencilMarks = [];
           cell.valid = true;
         }
       });

@@ -1,6 +1,6 @@
 export const Cell = (props) => {
   const classes = ["cell", props.selectedClass];
-  const pencilMarks = Array.from(props.value.pencilMarks).sort().join(' ');
+  const pencilMarks = props.value.pencilMarks.slice().sort().join(' ');
 
   if (props.value.locked) {
     classes.push("locked");

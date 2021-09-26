@@ -99,13 +99,22 @@ function removePencilMarks(cells, row, col, digit) {
     const sameBlock = cells[sameBlockIdx];
 
     if (sameColIdx !== cellIdx) {
-      sameCol.pencilMarks.delete(digit);
+      const i = sameCol.pencilMarks.indexOf(digit);
+      if (i !== -1) {
+        sameCol.pencilMarks.splice(i, 1);
+      }
     }
     if (sameRowIdx !== cellIdx) {
-      sameRow.pencilMarks.delete(digit);
+      const i = sameRow.pencilMarks.indexOf(digit);
+      if (i !== -1) {
+        sameRow.pencilMarks.splice(i, 1);
+      }
     }
     if (sameBlockIdx !== cellIdx) {
-      sameBlock.pencilMarks.delete(digit);
+      const i = sameBlock.pencilMarks.indexOf(digit);
+      if (i !== -1) {
+        sameBlock.pencilMarks.splice(i, 1);
+      }
     }
   }
 }
