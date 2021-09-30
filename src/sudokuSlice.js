@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { checkCellObjectValid, removePencilMarks } from './sudoku';
+import undoable from 'redux-undo';
 
 const initialData = [
   0, 0, 1, 2, 0, 3, 4, 0, 0,
@@ -67,4 +68,4 @@ export const sudokuSlice = createSlice({
 });
 
 export const {setDigit, setPencilMark, verify, restart} = sudokuSlice.actions;
-export default sudokuSlice.reducer;
+export default undoable(sudokuSlice.reducer);

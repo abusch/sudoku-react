@@ -3,7 +3,7 @@ import { Cell } from './cell';
 
 export const Block = (props) => {
   const selection = useSelector(state => state.selection);
-  const data = useSelector(state => state.sudoku);
+  const data = useSelector(state => state.sudoku.present);
 
   const blockX = props.x;
   const blockY = props.y;
