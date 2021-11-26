@@ -6,8 +6,8 @@ You can play online [here](https://abusch.github.io/sudoku-react). To start loca
 
 ## TODO
   - [x] Adjust pencil marks when entering a digit
-  - [ ] Check if the sudoku is solved on every move
-  - [ ] replace `Set` with something else for pencil marks as it apparently doesn't play well with redux
+  - [ ] Check if the sudoku is solved on every move (maybe?)
+  - [x] replace `Set` with something else for pencil marks as it apparently doesn't play well with redux
   - [x] Add *check* or *verify* button instead of checking on every move
   - [x] add *reset* button to start over
   - [ ] finish up sudoku generator
