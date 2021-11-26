@@ -1,11 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+interface SelectionState {
+  row: number,
+  column: number,
+}
+const initialState: SelectionState = {
+  row: 0,
+  column: 0,
+};
+
 export const selectionSlice = createSlice({
   name: 'selection',
-  initialState: {
-    row: 0,
-    column: 0,
-  },
+  initialState: initialState,
   reducers: {
     moveRight: state => {
       state.column = (state.column === 8) ? 0 : (state.column + 1);

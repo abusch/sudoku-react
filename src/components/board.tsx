@@ -1,7 +1,7 @@
 import { Block } from './block';
 
 export const Board = () => {
-  const renderBlock = (x, y) => {
+  const renderBlock = (x: number, y: number) => {
     return <Block x={x} y={y} />;
   };
 

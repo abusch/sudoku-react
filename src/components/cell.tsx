@@ -1,4 +1,11 @@
-export const Cell = (props) => {
+import {CellData} from '../sudoku';
+
+interface CellProps {
+  value: CellData,
+  selectedClass: string,
+}
+
+export const Cell: React.FC<CellProps> = (props) => {
   const classes = ["cell", props.selectedClass];
   const pencilMarks = props.value.pencilMarks.slice().sort().join(' ');
 

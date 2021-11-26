@@ -1,9 +1,18 @@
 import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 import { Cell } from './cell';
 
-export const Block = (props) => {
-  const selection = useSelector(state => state.selection);
-  const data = useSelector(state => state.sudoku.present);
+interface BlockProps {
+  x: number,
+  y: number,
+}
+
+const selectionSelector = (state: RootState) => state.selection;
+const dataSelector = (state: RootState) => state.sudoku.present;
+
+export const Block = (props: BlockProps) => {
+  const selection = useSelector(selectionSelector);
+  const data = useSelector(dataSelector);
 
   const blockX = props.x;
   const blockY = props.y;

@@ -1,9 +1,9 @@
-type Cell = {
+export interface CellData {
   value: number,
   locked: boolean,
   valid: boolean,
   pencilMarks: Array<number>,
-};
+}
 
 // Recursively attempts to solve this sudoku
 function solveSudoku(cells: Array<number>) {
@@ -51,7 +51,7 @@ function checkCellValid(cells: Array<number>, cell_idx: number, digit: number) {
   return true;
 }
 
-function checkCellObjectValid(cells: Array<Cell>, row: number, col: number, digit: number) {
+function checkCellObjectValid(cells: Array<CellData>, row: number, col: number, digit: number) {
   if (digit === 0) {
     return true;
   }
@@ -87,7 +87,7 @@ function checkCellObjectValid(cells: Array<Cell>, row: number, col: number, digi
 
 // Remove the pencil marks matching the given digit in the same row/column/block as the
 // given selection.
-function removePencilMarks(cells: Array<Cell>, row: number, col: number, digit: number) {
+function removePencilMarks(cells: Array<CellData>, row: number, col: number, digit: number) {
 
   // top-left coordinates of the 3x3 block that contains the cell
   const cellIdx = row * 9 + col;

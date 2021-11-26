@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { moveRight, moveLeft, moveUp, moveDown } from './selectionSlice';
 import { setDigit, setPencilMark } from './sudokuSlice';
 import { Board } from './components/board';
 import { Controls } from './components/controls';
 import './App.css';
+import { RootState } from './store';
 
+const selectionSelector = (state: RootState) => state.selection;
 const App = () => {
-  const selection = useSelector(state => state.selection);
+  const selection = useSelector(selectionSelector);
   const dispatch = useDispatch();
 
-  const digitKeyToDigit = (code) => {
+  const digitKeyToDigit = (code: string) => {
     switch (code) {
       case "Digit1": return 1;
       case "Digit2": return 2;
@@ -26,7 +28,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       let x = selection.column;
       let y = selection.row;
 
@@ -38,17 +40,6 @@ const App = () => {
         dispatch(moveLeft());
       } else if (event.key === 'l' || event.key === 'ArrowRight') {
         dispatch(moveRight());
-      } else if (digitKeyToDigit(event.code)) {
-        const payload = {
-          column: x,
-          row: y,
-          digit: digitKeyToDigit(event.code),
-        };
-        if (event.shiftKey) {
-          dispatch(setPencilMark(payload));
-        } else {
-          dispatch(setDigit(payload));
-        }
       } else if (event.key === 'Backspace') {
         const payload = {
           column: x,
@@ -56,6 +47,20 @@ const App = () => {
           digit: 0,
         };
         dispatch(setDigit(payload));
+      } else {
+        const digit = digitKeyToDigit(event.code);
+        if (digit) {
+          const payload = {
+            column: x,
+            row: y,
+            digit: digit,
+          };
+          if (event.shiftKey) {
+            dispatch(setPencilMark(payload));
+          } else {
+            dispatch(setDigit(payload));
+          }
+        }
       }
     };
 

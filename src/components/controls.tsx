@@ -1,9 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
+import {RootState} from '../store';
 import {verify, restart} from '../sudokuSlice';
 import { ActionCreators as UndoActionCreators} from 'redux-undo';
 
-export const Controls = (props) => {
-  const sudoku = useSelector(state => state.sudoku);
+const sudokuSelector = (state: RootState) => state.sudoku;
+
+export const Controls = () => {
+  const sudoku = useSelector(sudokuSelector);
   const dispatch = useDispatch();
 
   return <div className="controls">
