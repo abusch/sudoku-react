@@ -14,5 +14,5 @@ You can play online [here](https://abusch.github.io/sudoku-react). To start loca
   - [x] implement Undo functionality (maybe using redux?)
   - [ ] refactor/split-up CSS to be less of a mess (move to SCSS or SASS or css-modules or whatever?)
   - [ ] add timer
-  - [ ] move to TypeScript
+  - [x] move to TypeScript
 
