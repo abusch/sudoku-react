@@ -1,5 +1,12 @@
+type Cell = {
+  value: number,
+  locked: boolean,
+  valid: boolean,
+  pencilMarks: Array<number>,
+};
+
 // Recursively attempts to solve this sudoku
-function solveSudoku(cells) {
+function solveSudoku(cells: Array<number>) {
   let cell_idx = findEmptyCell(cells);
   if (cell_idx === -1) {
     // No more empty cells, we've solved the sudoku
@@ -23,7 +30,7 @@ function solveSudoku(cells) {
   return false;
 }
 
-function checkCellValid(cells, cell_idx, digit) {
+function checkCellValid(cells: Array<number>, cell_idx: number, digit: number) {
   const row = Math.floor(cell_idx / 9);
   const col = cell_idx % 9;
   // top-left coordinates of the 3x3 block that contains the cell
@@ -44,7 +51,7 @@ function checkCellValid(cells, cell_idx, digit) {
   return true;
 }
 
-function checkCellObjectValid(cells, row, col, digit) {
+function checkCellObjectValid(cells: Array<Cell>, row: number, col: number, digit: number) {
   if (digit === 0) {
     return true;
   }
@@ -80,7 +87,7 @@ function checkCellObjectValid(cells, row, col, digit) {
 
 // Remove the pencil marks matching the given digit in the same row/column/block as the
 // given selection.
-function removePencilMarks(cells, row, col, digit) {
+function removePencilMarks(cells: Array<Cell>, row: number, col: number, digit: number) {
 
   // top-left coordinates of the 3x3 block that contains the cell
   const cellIdx = row * 9 + col;
@@ -119,7 +126,7 @@ function removePencilMarks(cells, row, col, digit) {
   }
 }
 
-function findEmptyCell(cells) {
+function findEmptyCell(cells: Array<number>) {
   for (let i = 0; i < 81; i++) {
     if (cells[i] === 0) {
       return i;
