@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CellData, checkCellObjectValid, removePencilMarks } from './sudoku';
+import { CellData, checkCellObjectValid, generateSudoku, removePencilMarks } from './sudoku';
 import undoable from 'redux-undo';
 
 const initialData = [
@@ -71,9 +71,13 @@ export const sudokuSlice = createSlice({
           cell.valid = true;
         }
       });
+    },
+    generateNew: (state) => {
+      const sudoku = generateSudoku();
+      state.splice(0, 81, ...sudoku.map(digitToCell));
     }
   }
 });
 
-export const {setDigit, setPencilMark, verify, restart} = sudokuSlice.actions;
+export const {setDigit, setPencilMark, verify, restart, generateNew} = sudokuSlice.actions;
 export default undoable(sudokuSlice.reducer);

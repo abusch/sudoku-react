@@ -5,8 +5,88 @@ export interface CellData {
   pencilMarks: Array<number>,
 }
 
+// Generate a sudoku to be solve, i.e. with a number of empty cells, and with
+// the guarantee that there is a unique solution.
+function generateSudoku(): number[] {
+  let sudoku = generateValidSudoku();
+
+  let removed_digits = 0;
+
+  while (removed_digits <= 60) {
+    let idx = Math.floor(Math.random() * sudoku.length);
+    if (sudoku[idx] === 0) {
+      continue;
+    }
+    let temp = sudoku[idx];
+    sudoku[idx] = 0;
+    if (countSolutions([...sudoku]) === 1) {
+      removed_digits += 1;
+    } else {
+      sudoku[idx] = temp;
+    }
+  }
+
+  return sudoku;
+}
+
+// Generate a fully solved sudoku
+function generateValidSudoku(): number[] {
+  let sudoku: number[] = Array<number>(81);
+  sudoku.fill(0);
+
+  if (generateSudokuInternal(sudoku)) {
+    return sudoku;
+  }
+
+  return [];
+}
+
+function generateSudokuInternal(cells: number[]) {
+  let cell_idx = findEmptyCell(cells);
+  
+  if (cell_idx === -1) {
+    return true;
+  }
+
+  let digits = generateRandomPermutation();
+  for (const digit of digits) {
+    if (checkCellValid(cells, cell_idx, digit)) {
+      cells[cell_idx] = digit;
+      if (generateSudokuInternal(cells)) {
+        return true;
+      } else {
+        cells[cell_idx] = 0;
+      }
+    }
+  }
+
+  return false;
+}
+
+function countSolutions(cells: Array<number>): number {
+  let num_solutions = 0;
+  let cell_idx = findEmptyCell(cells);
+
+  if (cell_idx === -1) {
+    return 0;
+  }
+
+  for (let i = 1; i <= 9; i++) {
+    if (checkCellValid(cells, cell_idx, i)) {
+      cells[cell_idx] = i;
+      if (solveSudoku(cells)) {
+        num_solutions += 1;
+      } else {
+        cells[cell_idx] = 0;
+      }
+    }
+  }
+
+  return num_solutions;
+}
+
 // Recursively attempts to solve this sudoku
-function solveSudoku(cells: Array<number>) {
+function solveSudoku(cells: Array<number>): boolean {
   let cell_idx = findEmptyCell(cells);
   if (cell_idx === -1) {
     // No more empty cells, we've solved the sudoku
@@ -30,7 +110,8 @@ function solveSudoku(cells: Array<number>) {
   return false;
 }
 
-function checkCellValid(cells: Array<number>, cell_idx: number, digit: number) {
+// Check if placing the given digit in the given cell index is a valid move
+function checkCellValid(cells: Array<number>, cell_idx: number, digit: number): boolean {
   const row = Math.floor(cell_idx / 9);
   const col = cell_idx % 9;
   // top-left coordinates of the 3x3 block that contains the cell
@@ -51,7 +132,7 @@ function checkCellValid(cells: Array<number>, cell_idx: number, digit: number) {
   return true;
 }
 
-function checkCellObjectValid(cells: Array<CellData>, row: number, col: number, digit: number) {
+function checkCellObjectValid(cells: Array<CellData>, row: number, col: number, digit: number): boolean {
   if (digit === 0) {
     return true;
   }
@@ -126,7 +207,8 @@ function removePencilMarks(cells: Array<CellData>, row: number, col: number, dig
   }
 }
 
-function findEmptyCell(cells: Array<number>) {
+// Finds the first (starting from the top-right and working row by row) cell that is empty
+function findEmptyCell(cells: Array<number>): number {
   for (let i = 0; i < 81; i++) {
     if (cells[i] === 0) {
       return i;
@@ -136,4 +218,17 @@ function findEmptyCell(cells: Array<number>) {
   return -1;
 }
 
-export {solveSudoku, checkCellObjectValid, removePencilMarks};
+// Generate a random permutation of the digits from 1 to 9
+function generateRandomPermutation() {
+  let digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  for (let i =0; i < 9; i++) {
+    let idx = i + Math.floor(Math.random() * (9 - i));
+    let t = digits[i];
+    digits[i] = digits[idx];
+    digits[idx] = t;
+  }
+
+  return digits;
+}
+
+export {solveSudoku, checkCellObjectValid, removePencilMarks, countSolutions, generateSudoku, generateRandomPermutation};
