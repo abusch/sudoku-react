@@ -12,7 +12,7 @@ function generateSudoku(): number[] {
 
   let removed_digits = 0;
 
-  while (removed_digits <= 60) {
+  while (removed_digits <= 50) {
     let idx = Math.floor(Math.random() * sudoku.length);
     if (sudoku[idx] === 0) {
       continue;
@@ -64,21 +64,18 @@ function generateSudokuInternal(cells: number[]) {
 }
 
 function countSolutions(cells: Array<number>): number {
-  let num_solutions = 0;
   let cell_idx = findEmptyCell(cells);
 
   if (cell_idx === -1) {
-    return 0;
+    return 1;
   }
 
+  let num_solutions = 0;
   for (let i = 1; i <= 9; i++) {
     if (checkCellValid(cells, cell_idx, i)) {
       cells[cell_idx] = i;
-      if (solveSudoku(cells)) {
-        num_solutions += 1;
-      } else {
-        cells[cell_idx] = 0;
-      }
+      num_solutions += countSolutions(cells);
+      cells[cell_idx] = 0;
     }
   }
 
